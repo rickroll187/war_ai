@@ -1,3 +1,2 @@
-# tests/test_all.py
-def test_smoke():
-    assert 2+2 == 4
+# Placeholder for test_all.py
+print('This is test_all.py')
