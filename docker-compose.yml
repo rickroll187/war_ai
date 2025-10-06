@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - neo4j
+
+  dashboard:
+    build: .
+    command: ["streamlit","run","dashboard/main_dashboard.py","--server.port","8501","--server.address","0.0.0.0"]
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - api
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: war_ai
+      POSTGRES_PASSWORD: secure123
+      POSTGRES_DB: war_ai
+    ports: ["5432:5432"]
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  neo4j:
+    image: neo4j:5
+    environment:
+      NEO4J_AUTH: "neo4j/password"
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+
+volumes:
+  db_data:
